@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 2-5</title>
+	</head>
+	<body>
+		<canvas id="myCanvas" width="1000" height="600"></canvas>
+		<script>
+
+			var ellipse = function(ctx, x, y, width, height) {
+
+				ctx.beginPath();
+
+				ctx.moveTo(x, y - height / 2);
+
+				ctx.bezierCurveTo(
+					x + width / 2, y - height / 2,
+					x + width / 2, y + height / 2,
+					x, y + height / 2);
+
+				ctx.bezierCurveTo(
+					x - width / 2, y + height / 2,
+					x - width / 2, y - height / 2,
+					x, y - height / 2);
+
+				ctx.stroke();
+			}
+
+			var geoide = function(ctx, x, y, radius, step) {
+
+				step = step || .01;
+
+				ctx.lineWidth = 2;
+
+				for(var i = 0; i < 1.0; i += step) {
+
+					var hue = i * 256;
+
+					ctx.strokeStyle = 'hsla('+ hue + ', 100%, 50%, .3)';
+
+					ellipse(ctx, x, y, radius * i, radius);
+				}
+
+			}
+
+			// Get the canvas and the 2d drawing context.
+			//
+			var canvas = document.getElementById('myCanvas');
+			var ctx = canvas.getContext('2d');
+
+			for(var i = 0; i < 30; i += 1) {
+				geoide(
+						ctx, 
+						Math.random() * canvas.width, 
+						Math.random() * canvas.height,
+						Math.random() * Math.min(canvas.width, canvas.height),
+						.1);
+			}
+
+			// Draw the boundaries of the canvas.
+			// Doing this AFTER the squares puts the bounding box on top of everything.
+			//
+			ctx.strokeStyle = 'rgba(20, 20, 20, .8)';
+			ctx.lineWidth = 5;
+			ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+		</script>
+	</body>
+</html>
